@@ -10,9 +10,8 @@ spring:
   jackson:
     date-format: purple.sakura.community.config.ChinaTimeFormat
 
-  # 静态资源
 
+  #加载多个配置文件
+  profiles:
+    active: github
 
-
-#  spring.resources.static-locations= classpath:/static        //此配置为静态资源的真实路径
-#  spring.mvc.static-path-pattern=/resources/static/**        //此配置为访问静态资源的url配置
