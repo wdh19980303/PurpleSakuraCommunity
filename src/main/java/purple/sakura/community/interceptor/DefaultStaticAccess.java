@@ -7,7 +7,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 
 
 /**
- * 防止静态资源被拦截
+ * 防止静态资源被拦截 已经和上一个合并,避免冲突
+ *
  */
 @Configuration
 public class DefaultStaticAccess extends WebMvcConfigurationSupport {
