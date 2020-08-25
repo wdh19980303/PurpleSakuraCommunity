@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import purple.sakura.community.mapper.CommunityUserMapper;
-import purple.sakura.community.pojo.CommunityUser;
+import purple.sakura.community.model.CommunityUser;
 import purple.sakura.community.service.CommunityUserService;
 
 @Service
@@ -16,7 +16,10 @@ public class CommunityUserServiceImpl implements CommunityUserService {
 
 
     @Override
-    public boolean userIsExist(CommunityUser communityUser) {
+    public boolean userIsExistByAccountID(String accountId) {
+        CommunityUser communityUser = new CommunityUser();
+        communityUser.setAccountId(accountId);
+
         return communityUserMapper.selectOne(communityUser) != null;
     }
 
@@ -32,5 +35,27 @@ public class CommunityUserServiceImpl implements CommunityUserService {
         CommunityUser communityUser = new CommunityUser();
         communityUser.setToken(token);
         return communityUserMapper.selectOne(communityUser);
+    }
+
+    @Override
+    public CommunityUser selectByAccountID(String accountId) {
+        CommunityUser communityUser = new CommunityUser();
+        communityUser.setAccountId(accountId);
+        return communityUserMapper.selectOne(communityUser);
+    }
+
+    @Override
+    public void updateByIdSelect(CommunityUser communityUser) {
+        communityUserMapper.updateByPrimaryKeySelective(communityUser);
+    }
+
+    @Override
+    public boolean userIsExist(CommunityUser communityUser) {
+        return communityUserMapper.selectOne(communityUser) == null;
+    }
+
+    @Override
+    public CommunityUser selectById(Integer Id) {
+        return communityUserMapper.selectByPrimaryKey(Id);
     }
 }

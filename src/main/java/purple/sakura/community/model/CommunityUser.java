@@ -1,14 +1,16 @@
-package purple.sakura.community.pojo;
+package purple.sakura.community.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import tk.mybatis.mapper.annotation.KeySql;
 
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
 
 @Data
+@Entity
 @Table(name = "user")
 public class CommunityUser {
 
@@ -29,6 +31,9 @@ public class CommunityUser {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date gmtModified;
 
+    private String dio;
+
+    private String avatarUrl;
 
 
 

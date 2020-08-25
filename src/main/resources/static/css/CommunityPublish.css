@@ -1,4 +1,15 @@
 .btn_publish {
     float: right;
     border-color: cyan;
+    margin-right: -15px;
 }
+
+
+.errorTip{
+    width: 40%;
+    height: 30px;
+    padding: 6px;
+    margin-left: -15px;
+    margin-top: -20px;
+}
+

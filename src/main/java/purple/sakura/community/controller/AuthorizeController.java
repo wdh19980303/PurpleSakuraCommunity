@@ -6,11 +6,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
-import purple.sakura.community.pojo.CommunityUser;
-import purple.sakura.community.pojo.GitHubAccessToken;
-import purple.sakura.community.pojo.GitHubUser;
+import purple.sakura.community.model.CommunityUser;
+import purple.sakura.community.model.GitHubAccessToken;
+import purple.sakura.community.model.GitHubUser;
 import purple.sakura.community.provider.GithubProvider;
 import purple.sakura.community.service.CommunityUserService;
+import purple.sakura.community.utils.UserConvert;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -31,6 +32,8 @@ public class AuthorizeController {
     private CommunityUserService communityUserService;
 
 
+
+
     @RequestMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
                            @RequestParam(name = "state") String state,
@@ -45,29 +48,40 @@ public class AuthorizeController {
         String accessToken = githubProvider.getAccessToken(gitHubAccessToken);
 
         GitHubUser user = githubProvider.getUser(accessToken);
-
+        System.out.println(user.getAvatarUrl());
 
         if (user != null) {
             // 登录成功
-            model.addAttribute("user", user);
-
-            CommunityUser communityUser = new CommunityUser();
-            communityUser.setAccountId(user.getId());
-
+            CommunityUser loginCommunityUser = UserConvert.gitHubUserToCommunityUser(user);
+            CommunityUser oldCommunityUser = new CommunityUser();
 
             // 如果用户不存在, 存储用户到数据库
-            if ( !communityUserService.userIsExist(communityUser)) {
+            if (!communityUserService.userIsExistByAccountID(user.getId())) {
 
-                communityUser.setUsername(user.getName());
-                communityUser.setToken(accessToken);
-                communityUser.setGmtCreate(new Date());
-                communityUser.setGmtModified(new Date());
-                communityUserService.save(communityUser);
+                loginCommunityUser.setToken(accessToken);
+                loginCommunityUser.setGmtCreate(new Date());
+                loginCommunityUser.setGmtModified(new Date());
+                communityUserService.save(loginCommunityUser);
+            } else {
+                // 更新用户信息
+                oldCommunityUser = communityUserService.selectByAccountID(user.getId());
+
+                // 登录用户信息不包含存储用户的Id, 需要对老用户信息进行更新的话需要把老用户id设置到新用户中,然后更新
+                loginCommunityUser.setId(oldCommunityUser.getId());
+
+                // 把token和用户时间设置到里面
+                loginCommunityUser.setToken(accessToken);
+                loginCommunityUser.setGmtModified(new Date());
+
+
+                communityUserService.updateByIdSelect(loginCommunityUser);
             }
+
+
+            model.addAttribute("user", loginCommunityUser);
 
             // 写入cookie 实现登录
             response.addCookie(new Cookie("token", accessToken));
-
 
 
             // 重定向回主页

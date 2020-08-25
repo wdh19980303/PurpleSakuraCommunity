@@ -11,9 +11,10 @@ spring:
       max-wait: 3000
 
 mybatis:
-  type-aliases-package: purple.sakura.community.pojo
-#  mapper-locations: classpath:mapper/*.xml
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+  type-aliases-package: purple.sakura.community.model
   type-handlers-package: purple.sakura.community.config
+#  mapper-locations: classpath:mapper/*.xml
 

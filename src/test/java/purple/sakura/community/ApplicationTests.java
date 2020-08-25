@@ -7,9 +7,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import purple.sakura.community.config.ChinaTimeFormat;
 import purple.sakura.community.mapper.CommunityUserMapper;
-import purple.sakura.community.pojo.Article;
-import purple.sakura.community.pojo.CommunityUser;
-import purple.sakura.community.pojo.GitHubAccessToken;
+import purple.sakura.community.model.Article;
+import purple.sakura.community.model.CommunityUser;
+import purple.sakura.community.model.GitHubAccessToken;
 import purple.sakura.community.service.ArticleService;
 import purple.sakura.community.service.CommunityUserService;
 

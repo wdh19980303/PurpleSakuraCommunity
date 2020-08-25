@@ -54,7 +54,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown" th:if="${session.user != null }">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-             aria-expanded="false" th:text="${session.user.getName()}"><span class="caret"></span></a>
+             aria-expanded="false" th:text="${session.user.getUsername()}"><span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="#">个人信息</a></li>
             <li><a href="#">通知中心</a></li>
@@ -79,21 +79,30 @@
         <form action="/pushArticle" method="post">
           <div class="form-group">
             <label for="title">文章标题: </label>
-            <input type="text" class="form-control" id="title" name="title" placeholder="输入标题">
+            <input type="text"  th:value="${article != null ? article.getTitle():'' }" class="form-control" id="title" name="title" placeholder="输入标题">
           </div>
 
           <div class="form-group">
-            <label for="description">文章补充: </label>
-            <textarea name="description" style="resize:none" rows="30" class="form-control" id="description" placeholder="输入"></textarea>
+            <label for="title">文章简介: </label>
+            <input type="text"  th:value="${article != null ? article.getIntroduction():'' }" class="form-control" id="introduction" name="introduction" placeholder="输入简介">
+          </div>
+
+          <div class="form-group">
+            <label for="description">文章正文: </label>
+            <textarea name="description"  th:text="${article != null ? article.getDescription():''}" style="resize:none" rows="30" class="form-control" id="description" placeholder="输入"></textarea>
           </div>
 
 
           <div class="form-group">
-            <label for="addTag">添加标签: </label>
-            <input type="text" class="form-control"  id="addTag" name="tag" placeholder="添加标签">
+            <label for="addTag" >添加标签: </label>
+            <input type="text" th:value="${article != null ? article.getTag():''}" class="form-control"  id="addTag" name="tag" placeholder="添加标签">
           </div>
 
-          <button type="submit" class="btn btn-success btn_publish">发布</button>
+          <div class="container-fluid" >
+            <span th:if="${session.user == null }" id="" class="alert alert-danger errorTip" role="alert" >用户未登录</span>
+            <span th:if="${error != null and error != '' }"  th:text="${error}"  class="alert alert-danger errorTip" role="alert" ></span>
+            <button type="submit" class="btn btn-success btn_publish">发布</button>
+          </div>
         </form>
       </div>
       <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" >

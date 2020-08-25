@@ -1,7 +1,7 @@
 package purple.sakura.community.mapper;
 
 import org.springframework.stereotype.Repository;
-import purple.sakura.community.pojo.CommunityUser;
+import purple.sakura.community.model.CommunityUser;
 import tk.mybatis.mapper.common.Mapper;
 
 @Repository

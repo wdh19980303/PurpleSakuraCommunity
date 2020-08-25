@@ -1,4 +1,4 @@
-package purple.sakura.community.pojo;
+package purple.sakura.community.model;
 
 import lombok.Data;
 
@@ -7,6 +7,7 @@ public class GitHubUser {
     private String name;
     private String dio;
     private String id;
+    private String avatarUrl;
 
 
 }

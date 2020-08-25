@@ -1,4 +1,4 @@
-package purple.sakura.community.pojo;
+package purple.sakura.community.model;
 
 
 import lombok.Data;

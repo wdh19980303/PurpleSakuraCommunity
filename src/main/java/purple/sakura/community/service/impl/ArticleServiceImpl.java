@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import purple.sakura.community.mapper.ArticleMapper;
-import purple.sakura.community.pojo.Article;
+import purple.sakura.community.model.Article;
 import purple.sakura.community.service.ArticleService;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -21,11 +23,33 @@ public class ArticleServiceImpl implements ArticleService {
         try {
              i = articleMapper.insertSelective(article);
         } catch (Exception e) {
+            e.printStackTrace();
            return false;
         }
 
 
         return  i == 1;
 
+    }
+
+    @Override
+    public boolean titleIsExist(String title) {
+       Article article = new Article();
+       article.setTitle(title);
+        try {
+            if( articleMapper.selectOne(article) != null) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
+
+    @Override
+    public List<Article> findAll() {
+        return articleMapper.selectAll();
     }
 }

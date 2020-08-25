@@ -5,8 +5,8 @@ import okhttp3.*;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-import purple.sakura.community.pojo.GitHubAccessToken;
-import purple.sakura.community.pojo.GitHubUser;
+import purple.sakura.community.model.GitHubAccessToken;
+import purple.sakura.community.model.GitHubUser;
 
 import java.io.IOException;
 
@@ -41,7 +41,12 @@ public class GithubProvider {
         Request request = new Request.Builder().url("https://api.github.com/user?access_token=" + accessToken).build();
 
         try {
-            Response response = client.newCall(request).execute();
+            Response response = null;
+            try {
+                response = client.newCall(request).execute();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             String string = response.body().string();
             // json解析
             GitHubUser gitHubUser = JSON.parseObject(string, GitHubUser.class);
