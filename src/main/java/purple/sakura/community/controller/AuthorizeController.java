@@ -45,18 +45,21 @@ public class AuthorizeController {
 
         gitHubAccessToken.setState(state);
 
+        System.out.println(code);
+        System.out.println(state);
+
+        System.out.println(gitHubAccessToken);
         String accessToken = githubProvider.getAccessToken(gitHubAccessToken);
 
-        GitHubUser user = githubProvider.getUser(accessToken);
-        System.out.println(user.getAvatarUrl());
+        GitHubUser gitHubUser = githubProvider.getUser(accessToken);
 
-        if (user != null) {
+        if (gitHubUser != null) {
             // 登录成功
-            CommunityUser loginCommunityUser = UserConvert.gitHubUserToCommunityUser(user);
+            CommunityUser loginCommunityUser = UserConvert.gitHubUserToCommunityUser(gitHubUser);
             CommunityUser oldCommunityUser = new CommunityUser();
 
             // 如果用户不存在, 存储用户到数据库
-            if (!communityUserService.userIsExistByAccountID(user.getId())) {
+            if (!communityUserService.userIsExistByAccountID(gitHubUser.getId())) {
 
                 loginCommunityUser.setToken(accessToken);
                 loginCommunityUser.setGmtCreate(new Date());
@@ -64,7 +67,7 @@ public class AuthorizeController {
                 communityUserService.save(loginCommunityUser);
             } else {
                 // 更新用户信息
-                oldCommunityUser = communityUserService.selectByAccountID(user.getId());
+                oldCommunityUser = communityUserService.selectByAccountID(gitHubUser.getId());
 
                 // 登录用户信息不包含存储用户的Id, 需要对老用户信息进行更新的话需要把老用户id设置到新用户中,然后更新
                 loginCommunityUser.setId(oldCommunityUser.getId());
@@ -79,6 +82,7 @@ public class AuthorizeController {
 
 
             model.addAttribute("user", loginCommunityUser);
+
 
             // 写入cookie 实现登录
             response.addCookie(new Cookie("token", accessToken));

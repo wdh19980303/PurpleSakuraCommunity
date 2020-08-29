@@ -1,0 +1,13 @@
+.profile .list-group{
+    margin-top: 25px;
+}
+
+.profile .media .media-left {
+    display: none;
+}
+
+.profile .userChoose{
+    margin: 20px;
+    padding: 20px;
+
+}

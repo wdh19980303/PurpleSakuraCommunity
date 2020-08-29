@@ -11,6 +11,8 @@ spring:
     format:
       date: yyyy-MM-dd
       date-time: yyyy-MM-dd HH:mm:ss
+    static-path-pattern: /static/**
+
 
   ## 加载多个配置文件
   profiles:

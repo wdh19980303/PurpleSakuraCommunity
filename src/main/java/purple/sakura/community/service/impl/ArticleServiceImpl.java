@@ -1,5 +1,7 @@
 package purple.sakura.community.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,5 +53,25 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public List<Article> findAll() {
         return articleMapper.selectAll();
+    }
+
+    @Override
+    public Page<Article> pagination(Integer currentPage, Integer pageSize, Integer creator) {
+        Page<Article> articlePageSet = PageHelper.startPage(currentPage, pageSize);
+        if(creator == 0) {
+            articleMapper.selectAll();
+        }
+        else {
+            Article article = new Article();
+            article.setCreator(creator);
+            articleMapper.select(article);
+        }
+        return articlePageSet;
+    }
+
+    @Override
+    public Article findById(Integer articleId) {
+
+        return articleMapper.selectByPrimaryKey(articleId);
     }
 }

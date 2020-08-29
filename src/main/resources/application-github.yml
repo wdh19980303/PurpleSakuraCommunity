@@ -1,4 +1,4 @@
 github:
   client_id: Iv1.96d62438fb115cf4
-  client_secret: 43e6bb03eca7a0285e213433b8808b32c50f9b64
+  client_secret: be1a21b215b8634ddda39f782eb427a39c669eb6
   redirect_url: http://localhost/callback

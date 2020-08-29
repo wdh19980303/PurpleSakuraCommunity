@@ -51,7 +51,7 @@ public class CommunityUserServiceImpl implements CommunityUserService {
 
     @Override
     public boolean userIsExist(CommunityUser communityUser) {
-        return communityUserMapper.selectOne(communityUser) == null;
+        return communityUserMapper.selectOne(communityUser) != null;
     }
 
     @Override

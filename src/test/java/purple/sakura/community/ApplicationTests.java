@@ -1,5 +1,7 @@
 package purple.sakura.community;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,6 +111,31 @@ class ApplicationTests {
         System.out.println(b);
         System.out.println("++++++++++++++++++++");
 
+    }
+
+
+    @Test
+    public void test09() throws Exception {
+        Page<Article> objects = PageHelper.startPage(1, 2);
+        List<Article> all = articleService.findAll();
+        System.out.println(all);
+        System.out.println(objects);
+        System.out.println("_________________________");
+        List<Article> result = objects.getResult();
+    }
+
+
+    @Test
+    public void test10() throws Exception {
+        Page<Article> articles = articleService.pagination(1, 2,3);
+        System.out.println(articles);
+    }
+
+
+    @Test
+    public void test11() throws Exception {
+        Article article = articleService.findById(2);
+        System.out.println(article);
     }
 
 }

@@ -3,14 +3,17 @@ package purple.sakura.community.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import purple.sakura.community.mapper.ArticleMapper;
 import purple.sakura.community.model.Article;
 import purple.sakura.community.model.CommunityUser;
+import purple.sakura.community.model.Message;
 import purple.sakura.community.service.ArticleService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
 
@@ -31,26 +34,25 @@ public class PublishController {
 
 
     @RequestMapping("/pushArticle")
-    public ModelAndView save(Article article, HttpServletRequest request, ModelAndView modelAndView) throws ServletException, IOException {
+    @ResponseBody
+    public Message<Article> save(Article article, HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 
-        // 先把文章存入request
-        modelAndView.addObject("article", article);
-
-
+        System.out.println(article);
         // 获取user数据
-        CommunityUser user = (CommunityUser) request.getSession().getAttribute("user");
+        CommunityUser user = (CommunityUser) req.getSession().getAttribute("user");
 
+        // 返回数据
+        Message<Article> message = new Message<>();
+        message.setModel(article);
 
         if (user == null) {
-            modelAndView.setViewName("publish");
-            modelAndView.addObject("error", "用户超时,轻重新登录");
-            return modelAndView;
+            message.setError("用户登录超时");
+            return message;
         }
 
         if (articleService.titleIsExist(article.getTitle())) {
-            modelAndView.setViewName("publish");
-            modelAndView.addObject("error", "文章标题重复");
-            return modelAndView;
+            message.setError("文章名已经存在");
+            return message;
         }
 
 
@@ -61,11 +63,16 @@ public class PublishController {
 
         boolean b = articleService.saveNewArticleService(article);
         System.out.println(b);
-        modelAndView.setViewName("index");
-        return modelAndView;
 
+        message.setFlag(true);
+        message.setError("发布成功");
 
+        req.getRequestDispatcher("/").forward(req,res);
+        return message;
     }
+
+
+
 
 }
 
